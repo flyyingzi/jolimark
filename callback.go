@@ -26,10 +26,7 @@ func (t TaskResult) check(key string) bool {
 
 //TaskCallbackVerify
 func (c *Client) TaskCallbackVerify(result TaskResult) bool {
-	if !result.check(c.callbackkey) {
-		return false
-	}
-	return true
+	return result.check(c.callbackkey)
 }
 
 // TaskCallback 打印任务结果回调更新
@@ -84,10 +81,7 @@ func (t DeviceStatus) check(key string) bool {
 
 //DeviceStatusCallbackVerify
 func (c *Client) DeviceStatusCallbackVerify(device DeviceStatus) bool {
-	if !device.check(c.callbackkey) {
-		return false
-	}
-	return true
+	return device.check(c.callbackkey)
 }
 
 // DeviceStatusCallback 打印设备状态回调更新
