@@ -1,7 +1,6 @@
 package jolimark
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -26,11 +25,11 @@ func (t TaskResult) check(key string) bool {
 }
 
 //TaskCallbackVerify
-func (c *Client) TaskCallbackVerify(result TaskResult) error {
+func (c *Client) TaskCallbackVerify(result TaskResult) bool {
 	if !result.check(c.callbackkey) {
-		return errors.New("sign has a error")
+		return false
 	}
-	return nil
+	return true
 }
 
 // TaskCallback 打印任务结果回调更新
@@ -84,11 +83,11 @@ func (t DeviceStatus) check(key string) bool {
 }
 
 //DeviceStatusCallbackVerify
-func (c *Client) DeviceStatusCallbackVerify(device DeviceStatus) error {
+func (c *Client) DeviceStatusCallbackVerify(device DeviceStatus) bool {
 	if !device.check(c.callbackkey) {
-		return errors.New("sign has a error")
+		return false
 	}
-	return nil
+	return true
 }
 
 // DeviceStatusCallback 打印设备状态回调更新
