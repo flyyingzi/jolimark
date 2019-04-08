@@ -12,11 +12,16 @@ type PrintTaskStatus struct{
 }
 
 // QueryPrintTaskStatus 根据客户订单号来查询打印任务状态的接口。
-func (c *Client) QueryPrintTaskStatus(accesstoken, cus_orderid string) (p Resp, err error) {
+func (c *Client) QueryPrintTaskStatus(accesstoken, cus_orderid string) (p PrintTaskStatus, err error) {
 	resp, err := c.getRequest(fmt.Sprintf("%s/sys/QueryPrintTaskStatus?app_id=%s&access_token=%s&cus_orderid=%s", HOST, c.appid, accesstoken, cus_orderid))
 	if err != nil {
 		return p, err
 	}
+
+	if resp.Code != 0 {
+		return p, Error{Code: resp.Code}
+	}
+
 	err = resp.Decode(&p)
 	return
 }
@@ -37,17 +42,22 @@ type NotPrintTaskStatus struct{
 }
 
 // QueryNotPrintTask 查询指定打印机未打印任务。
-func (c *Client) QueryNotPrintTask(accesstoken, device_id string) (p Resp, err error) {
+func (c *Client) QueryNotPrintTask(accesstoken, device_id string) (p PrintTaskStatus, err error) {
 	resp, err := c.getRequest(fmt.Sprintf("%s/sys/QueryNotPrintTask?app_id=%s&access_token=%s&device_id=%s", HOST, c.appid, accesstoken, device_id))
 	if err != nil {
 		return p, err
 	}
+
+	if resp.Code != 0 {
+		return p, Error{Code: resp.Code}
+	}
+
 	err = resp.Decode(&p)
 	return
 }
 
 // CancelNotPrintTask 取消指定打印机当前未完成的打印任务。
-func (c *Client) CancelNotPrintTask(accesstoken, device_id string) (p Resp, err error) {
+func (c *Client) CancelNotPrintTask(accesstoken, device_id string) (p NotPrintTaskStatus, err error) {
 	resp,err:= c.postFormRequest(HOST+"/sys/CancelNotPrintTask", map[string]interface{}{
 		"app_id":       c.appid,
 		"access_token": accesstoken,
@@ -56,6 +66,11 @@ func (c *Client) CancelNotPrintTask(accesstoken, device_id string) (p Resp, err 
 	if err!=nil{
 		return p ,err
 	}
+
+	if resp.Code != 0 {
+		return p, Error{Code: resp.Code}
+	}
+
 	err = resp.Decode(&p)
 	return
 }

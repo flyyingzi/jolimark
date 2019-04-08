@@ -49,11 +49,16 @@ type Printer struct {
 }
 
 // QueryPrinterInfo 查询打印机的基础信息，包括当前的软件、固件版本以及打印机型号。
-func (c *Client) QueryPrinterInfo(accesstoken, device_id string) (p Resp, err error) {
+func (c *Client) QueryPrinterInfo(accesstoken, device_id string) (p Printer, err error) {
 	resp, err := c.getRequest(fmt.Sprintf("%s/sys/QueryPrinterInfo?app_id=%s&access_token=%s&device_id=%s", HOST, c.appid, accesstoken, device_id))
 	if err != nil {
 		return p, err
 	}
+
+	if resp.Code != 0 {
+		return p, Error{Code: resp.Code}
+	}
+
 	err = resp.Decode(&p)
 	return
 }
@@ -68,11 +73,16 @@ type PrinterStatus struct {
 }
 
 // QueryPrinterStatus 查询打印机的当前状态，包括打印机是否在线，是否缺纸，是否开盖等。
-func (c *Client) QueryPrinterStatus(accesstoken, device_id string) (p Resp, err error) {
+func (c *Client) QueryPrinterStatus(accesstoken, device_id string) (p PrinterStatus, err error) {
 	resp, err := c.getRequest(fmt.Sprintf("%s/sys/QueryPrinterStatus?app_id=%s&access_token=%s&device_id=%s", HOST, c.appid, accesstoken, device_id))
 	if err != nil {
 		return p, err
 	}
+
+	if resp.Code != 0 {
+		return p, Error{Code: resp.Code}
+	}
+
 	err = resp.Decode(&p)
 	return
 }
