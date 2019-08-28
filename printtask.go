@@ -27,6 +27,8 @@ func (c *Client) QueryPrintTaskStatus(accesstoken, cus_orderid string) (p PrintT
 }
 
 type NotPrintTaskStatus struct{
+	// 客户系统订单流水号
+	BillNo string `json:"bill_no"`
 	// 未打印的任务数
 	Count int `json:"count"`
 	// 未打印的任务集合
